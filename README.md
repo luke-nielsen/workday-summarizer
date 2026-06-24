@@ -15,15 +15,23 @@ recording.mp4
      ▼  ffmpeg samples 1 frame / 30s, downscaled to ≤768px
   [frames]
      │
-     ▼  map: each batch of frames → SegmentObservation   (OpenAI, structured output)
+     ▼  map: batches of frames → SegmentObservation   (OpenAI, concurrent, structured output)
 [observations]
      │
-     ▼  reduce: all observations → WorkdaySummary          (OpenAI, structured output)
+     ▼  reduce: all observations → WorkdaySummaryDraft     (OpenAI, structured output)
+     ▼  + focus metrics computed deterministically from the observations
  WorkdaySummary  → JSON + a Rich report
 ```
 
 Batching keeps every request inside the model's context window and bounds cost on long
 recordings; the map/reduce split lets the final summary reason over the whole day at once.
+Batches are analyzed concurrently (`WDS_MAX_CONCURRENCY`, default 4), and rate-limit
+responses are honoured via the server's `Retry-After` header.
+
+The focus score and the productive/distracted second totals are **not** guessed by the
+model — they are computed directly from the per-segment observations, so the headline
+numbers can never contradict the segments they summarise. Each run also reports its token
+usage and an estimated cost (when the model's pricing is known).
 
 ## Requirements
 

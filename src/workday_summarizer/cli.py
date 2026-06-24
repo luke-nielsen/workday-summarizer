@@ -80,7 +80,12 @@ def summarize(
         err_console.print(f"[green]Wrote summary to[/green] {output}")
 
     if not quiet:
-        render_summary(result.summary, console)
+        render_summary(
+            result.summary,
+            console,
+            usage=result.usage,
+            estimated_cost=result.estimated_cost,
+        )
     elif output is None:
         # Nothing else would be shown, so emit JSON to stdout to stay scriptable.
         console.print_json(result.summary.model_dump_json())

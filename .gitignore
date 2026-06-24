@@ -20,3 +20,7 @@ htmlcov/
 
 # OS
 .DS_Store
+
+# Run artifacts
+frames_progress.log
+report.json

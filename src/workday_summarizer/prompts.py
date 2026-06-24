@@ -31,10 +31,13 @@ Guidelines:
 - A task is a coherent unit of focused work; a distraction is time spent off-task.
 - Ground every task and distraction in the observations; do not fabricate.
 - Use the segment timestamps to set accurate start and end times in seconds.
-- Estimate productive vs. distracted seconds from the segments, and set a focus score \
-that honestly reflects the balance.
+- Surface every off-task stretch the observations flag as a distraction — do not quietly \
+fold it into a neighbouring task.
 - If no distractions were observed, return an empty distractions list and say so in the \
-narrative."""
+narrative.
+
+The overall focus score and the productive/distracted time totals are computed separately \
+from the observations, so you do not need to estimate them."""
 
 SUMMARY_USER_PREFIX = """\
 The recording spans approximately {duration}. Here are the ordered observations as JSON. \

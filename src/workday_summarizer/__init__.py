@@ -6,11 +6,13 @@ from workday_summarizer.models import (
     Task,
     WorkdaySummary,
 )
+from workday_summarizer.usage import TokenUsage
 
 __all__ = [
     "Distraction",
     "SegmentObservation",
     "Task",
+    "TokenUsage",
     "WorkdaySummary",
     "__version__",
 ]
