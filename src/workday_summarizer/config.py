@@ -50,12 +50,24 @@ class Settings(BaseSettings):
     batch_size: int = Field(
         default=12, gt=0, description="Number of frames sent per analysis request."
     )
+    max_concurrency: int = Field(
+        default=4, gt=0, description="Maximum number of analysis requests in flight at once."
+    )
 
     request_timeout_seconds: float = Field(
         default=120.0, gt=0, description="Per-request timeout for OpenAI calls."
     )
     max_retries: int = Field(
         default=4, ge=0, description="Retry attempts for transient API failures."
+    )
+
+    # Cost-estimate overrides for non-standard pricing (Azure, proxies, negotiated rates).
+    # Left unset, the built-in price table is used; unknown models simply report no cost.
+    input_cost_per_mtok: float | None = Field(
+        default=None, gt=0, description="USD per million input tokens, overriding the table."
+    )
+    output_cost_per_mtok: float | None = Field(
+        default=None, gt=0, description="USD per million output tokens, overriding the table."
     )
 
 

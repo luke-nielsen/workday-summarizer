@@ -75,8 +75,15 @@ class Distraction(BaseModel):
         return f"{_format_clock(self.start_seconds)} – {_format_clock(self.end_seconds)}"
 
 
-class WorkdaySummary(BaseModel):
-    """The final, synthesised report for an entire workday."""
+class WorkdaySummaryDraft(BaseModel):
+    """The qualitative summary the model produces in the *reduce* stage.
+
+    This is everything that genuinely needs the model's judgement: the narrative, the
+    tasks, the distractions. The quantitative focus metrics are deliberately *not* here —
+    they are computed deterministically from the segment observations (see
+    :func:`~workday_summarizer.analyzer.compute_focus_metrics`) so the headline numbers
+    can never contradict the segments they are meant to summarise.
+    """
 
     headline: str = Field(description="A single sentence capturing the day at a glance.")
     narrative: str = Field(description="A short paragraph narrating how the day unfolded.")
@@ -92,10 +99,24 @@ class WorkdaySummary(BaseModel):
     recommendations: list[str] = Field(
         description="Actionable suggestions for a more focused, productive day."
     )
+
+
+class WorkdaySummary(WorkdaySummaryDraft):
+    """The final report: the model's qualitative draft plus computed focus metrics."""
+
     focus_score: int = Field(
         ge=0,
         le=100,
         description="Overall focus from 0 (constantly distracted) to 100 (deep focus).",
     )
-    productive_seconds: float = Field(description="Estimated seconds spent on focused work.")
-    distracted_seconds: float = Field(description="Estimated seconds spent distracted.")
+    productive_seconds: float = Field(description="Seconds spent on focused work.")
+    distracted_seconds: float = Field(description="Seconds spent distracted.")
+
+
+__all__ = [
+    "Distraction",
+    "SegmentObservation",
+    "Task",
+    "WorkdaySummary",
+    "WorkdaySummaryDraft",
+]
